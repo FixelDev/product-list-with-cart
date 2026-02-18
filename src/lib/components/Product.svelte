@@ -17,9 +17,16 @@
 </article>
 
 <style>
+	.product-thumbnail {
+		position: relative;
+		width: 100%;
+	}
+
 	.product-thumbnail-image {
 		width: 100%;
 		border-radius: 0.5em;
+		margin: 0;
+		display: block;
 	}
 
 	.product-type {
@@ -29,7 +36,6 @@
 	}
 
 	.product-name {
-		color: var(--rose-900);
 		font-weight: var(--bold);
 		margin-bottom: 0.1em;
 	}

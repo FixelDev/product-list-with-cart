@@ -49,5 +49,20 @@ p {
 body {
 	font-family: var(--font-family);
 	min-height: 100vh;
-	background-color: var(--rose-50);
+	background-color: var(--rose-100);
+}
+
+h1,
+h2,
+p,
+button {
+	color: var(--rose-900);
+}
+
+.secondary-text {
+	color: var(--rose-500);
+}
+
+.accent-text {
+	color: (--red);
 }

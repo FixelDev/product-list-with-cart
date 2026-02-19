@@ -1,4 +1,5 @@
 export type ProductType = {
+	id: number;
 	image: ProductImageType;
 	name: string;
 	category: string;
@@ -10,4 +11,11 @@ export type ProductImageType = {
 	mobile: string;
 	tablet: string;
 	desktop: string;
+};
+
+export type ProductInCartType = {
+	id: number;
+	name: string;
+	quantity: number;
+	price: number;
 };

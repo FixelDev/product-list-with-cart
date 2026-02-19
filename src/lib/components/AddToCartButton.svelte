@@ -2,39 +2,58 @@
 	import cartIcon from '$lib/assets/images/icon-add-to-cart.svg';
 	import decrementQuantityIcon from '$lib/assets/images/icon-decrement-quantity.svg';
 	import incrementQuantityIcon from '$lib/assets/images/icon-increment-quantity.svg';
+
+	interface Props {
+		quantity: number;
+		onAddToCart: () => void;
+		isInCart: boolean;
+		onIncrementQuantity: () => void;
+		onDecrementQuantity: () => void;
+	}
+
+	const { quantity, onAddToCart, isInCart, onIncrementQuantity, onDecrementQuantity }: Props =
+		$props();
 </script>
 
 <div class="button-wrapper">
-	<button class="add-to-cart-btn text-lead-bold">
-		<img src={cartIcon} alt="Add to cart" class="add-to-card-img" />
-		Add to Cart
-	</button>
-
-	<!--	<div class="change-amount-wrapper text-lead-bold">-->
-	<!--		<button class="change-quantity-btn" aria-label="Decrease item quantity"-->
-	<!--			><svg-->
-	<!--				xmlns="http://www.w3.org/2000/svg"-->
-	<!--				width="10"-->
-	<!--				height="2"-->
-	<!--				fill="none"-->
-	<!--				viewBox="0 0 10 2"><path fill="#fff" d="M0 .375h10v1.25H0V.375Z" /></svg-->
-	<!--			></button-->
-	<!--		>-->
-	<!--		<span>1</span>-->
-	<!--		<button class="change-quantity-btn" aria-label="Increase item quantity"-->
-	<!--			><svg-->
-	<!--				xmlns="http://www.w3.org/2000/svg"-->
-	<!--				width="10"-->
-	<!--				height="10"-->
-	<!--				fill="none"-->
-	<!--				viewBox="0 0 10 10"-->
-	<!--				><path-->
-	<!--					fill="#fff"-->
-	<!--					d="M10 4.375H5.625V0h-1.25v4.375H0v1.25h4.375V10h1.25V5.625H10v-1.25Z"-->
-	<!--				/></svg-->
-	<!--			></button-->
-	<!--		>-->
-	<!--	</div>-->
+	{#if isInCart}
+		<div class="change-amount-wrapper text-lead-bold">
+			<button
+				class="change-quantity-btn"
+				aria-label="Decrease item quantity"
+				onclick={onDecrementQuantity}
+				><svg
+					xmlns="http://www.w3.org/2000/svg"
+					width="10"
+					height="2"
+					fill="none"
+					viewBox="0 0 10 2"><path fill="#fff" d="M0 .375h10v1.25H0V.375Z" /></svg
+				></button
+			>
+			<span>{quantity}</span>
+			<button
+				class="change-quantity-btn"
+				aria-label="Increase item quantity"
+				onclick={onIncrementQuantity}
+				><svg
+					xmlns="http://www.w3.org/2000/svg"
+					width="10"
+					height="10"
+					fill="none"
+					viewBox="0 0 10 10"
+					><path
+						fill="#fff"
+						d="M10 4.375H5.625V0h-1.25v4.375H0v1.25h4.375V10h1.25V5.625H10v-1.25Z"
+					/></svg
+				></button
+			>
+		</div>
+	{:else}
+		<button class="add-to-cart-btn text-lead-bold" onclick={onAddToCart}>
+			<img src={cartIcon} alt="Add to cart" class="add-to-card-img" />
+			Add to Cart
+		</button>
+	{/if}
 </div>
 
 <style>

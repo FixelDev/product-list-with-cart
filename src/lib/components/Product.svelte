@@ -1,21 +1,44 @@
 <script lang="ts">
 	import AddToCartButton from './AddToCartButton.svelte';
-	import type { ProductImageType } from '$lib/types';
+	import type { ProductImageType, ProductType } from '$lib/types';
 
 	interface Props {
+		id: number;
 		image: ProductImageType;
 		name: string;
 		category: string;
 		price: number;
+		quantity: number;
+		onAddToCart: () => void;
+		isInCart: (id: number) => boolean;
+		onIncrementQuantity: (id: number) => void;
+		onDecrementQuantity: (id: number) => void;
 	}
 
-	const { image, name, category, price }: Props = $props();
+	const {
+		id,
+		image,
+		name,
+		category,
+		price,
+		quantity,
+		onAddToCart,
+		isInCart,
+		onIncrementQuantity,
+		onDecrementQuantity
+	}: Props = $props();
 </script>
 
 <article class="product">
 	<div class="product-thumbnail">
 		<img src={image.mobile} alt={`${name} image`} class="product-thumbnail-image" />
-		<AddToCartButton />
+		<AddToCartButton
+			{quantity}
+			{onAddToCart}
+			isInCart={isInCart(id)}
+			onIncrementQuantity={() => onIncrementQuantity(id)}
+			onDecrementQuantity={() => onDecrementQuantity(id)}
+		/>
 	</div>
 
 	<div class="product-info">

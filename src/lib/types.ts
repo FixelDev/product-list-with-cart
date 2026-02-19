@@ -18,4 +18,5 @@ export type ProductInCartType = {
 	name: string;
 	quantity: number;
 	price: number;
+	thumbnail: string;
 };

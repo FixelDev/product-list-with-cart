@@ -7,23 +7,15 @@
 	interface Props {
 		products: ProductInCartType[];
 		onRemoveFromCart: (id: number) => void;
+		onOrderConfirmed: () => void;
+		orderTotalValue: number;
 	}
 
-	function getOrderTotalValue(): number {
-		const totalValue = products.reduce(
-			(accumulator, currentProduct) =>
-				accumulator + currentProduct.price * currentProduct.quantity,
-			0
-		);
-
-		return totalValue;
-	}
-
-	let { products, onRemoveFromCart }: Props = $props();
+	let { products, onRemoveFromCart, onOrderConfirmed, orderTotalValue }: Props = $props();
 </script>
 
 <div class="cart">
-	<h2 class="title heading">Your Cart (0)</h2>
+	<h2 class="title heading">Your Cart ({products.length})</h2>
 
 	{#if products.length > 0}
 		<div class="filled-cart-container">
@@ -39,7 +31,7 @@
 			</div>
 			<div class="order-summary">
 				<p class="text-lead">Order Total</p>
-				<b class="heading">${getOrderTotalValue().toFixed(2)}</b>
+				<b class="heading">${orderTotalValue.toFixed(2)}</b>
 			</div>
 			<div class="order-delivery-carbon-neutral-info">
 				<img src={carbonNeutralDeliveryIcon} alt="Carbon neutral delivery icon" />
@@ -47,7 +39,9 @@
 					This is a <b class="text-lead-bold">carbon-neutral</b> delivery
 				</p>
 			</div>
-			<button class="btn confirm-order-btn text-bold">Confirm Order</button>
+			<button class="btn confirm-order-btn text-bold" onclick={onOrderConfirmed}
+				>Confirm Order</button
+			>
 		</div>
 	{:else}
 		<div class="empty-cart-container">

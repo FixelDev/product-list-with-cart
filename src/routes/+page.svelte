@@ -8,13 +8,22 @@
 	const products: ProductType[] = [...productsData];
 
 	let productsInCart: ProductInCartType[] = $state([]);
+	let isOrderFinished: boolean = $state(false);
+	let orderTotalValue: number = $derived(
+		productsInCart.reduce(
+			(accumulator, currentProduct) =>
+				accumulator + currentProduct.price * currentProduct.quantity,
+			0
+		)
+	);
 
 	function addToCart(productToAdd: ProductType): void {
 		const newProduct: ProductInCartType = {
 			id: productToAdd.id,
 			name: productToAdd.name,
 			quantity: 1,
-			price: productToAdd.price
+			price: productToAdd.price,
+			thumbnail: productToAdd.image.thumbnail
 		};
 
 		productsInCart.push(newProduct);
@@ -103,11 +112,17 @@
 		</section>
 
 		<section class="cart-section">
-			<Cart products={productsInCart} onRemoveFromCart={removeFromCart} />
+			<Cart
+				products={productsInCart}
+				onRemoveFromCart={removeFromCart}
+				onOrderConfirmed={() => (isOrderFinished = true)}
+				{orderTotalValue}
+			/>
 		</section>
 	</div>
-
-	<OrderConfirmation />
+	{#if isOrderFinished}
+		<OrderConfirmation products={productsInCart} {orderTotalValue} />
+	{/if}
 </main>
 
 <style>
@@ -127,5 +142,8 @@
 
 	.products-section {
 		margin-bottom: 2em;
+		display: flex;
+		flex-direction: column;
+		gap: 1.5em;
 	}
 </style>

@@ -1,6 +1,14 @@
 <script lang="ts">
 	import orderConfirmedIcon from '$lib/assets/images/icon-order-confirmed.svg';
 	import ConfirmedItem from '$lib/components/ConfirmedItem.svelte';
+	import type { ProductInCartType } from '$lib/types';
+
+	interface Props {
+		products: ProductInCartType[];
+		orderTotalValue: number;
+	}
+
+	let { products, orderTotalValue }: Props = $props();
 </script>
 
 <section class="order-confirmation-section">
@@ -9,10 +17,23 @@
 		<h2 class="title heading-big">Order Confirmed</h2>
 		<p class="lead">We hope you enjoy your food!</p>
 
-		<div class="ordered-products">
-			<ConfirmedItem />
-			<ConfirmedItem />
+		<div class="order-summary">
+			<div class="ordered-products">
+				{#each products as product (product.id)}
+					<ConfirmedItem
+						thumbnail={product.thumbnail}
+						name={product.name}
+						quantity={product.quantity}
+						price={product.price}
+					/>
+				{/each}
+			</div>
+
+			<div class="order-total-price">
+				Order Total <b class="heading">${orderTotalValue.toFixed(2)}</b>
+			</div>
 		</div>
+
 		<button class="btn start-new-order-btn">Start New Order</button>
 	</div>
 </section>
@@ -56,9 +77,23 @@
 		margin-bottom: 2em;
 	}
 
-	.ordered-products {
+	.order-summary {
 		background-color: var(--rose-50);
 		padding: 1.5em;
 		border-radius: 0.5em;
+		margin-bottom: 2em;
+	}
+
+	.ordered-products {
+		display: flex;
+		flex-direction: column;
+		gap: 1em;
+		margin-bottom: 1.5em;
+	}
+
+	.order-total-price {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
 	}
 </style>

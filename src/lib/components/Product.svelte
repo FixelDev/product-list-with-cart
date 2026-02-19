@@ -1,18 +1,27 @@
 <script lang="ts">
-	import thumbnail from '$lib/assets/images/image-waffle-mobile.jpg';
 	import AddToCartButton from './AddToCartButton.svelte';
+	import type { ProductImageType } from '$lib/types';
+
+	interface Props {
+		image: ProductImageType;
+		name: string;
+		category: string;
+		price: number;
+	}
+
+	const { image, name, category, price }: Props = $props();
 </script>
 
 <article class="product">
 	<div class="product-thumbnail">
-		<img src={thumbnail} alt="" class="product-thumbnail-image" />
+		<img src={image.mobile} alt={`${name} image`} class="product-thumbnail-image" />
 		<AddToCartButton />
 	</div>
 
 	<div class="product-info">
-		<p class="product-type">Waffe</p>
-		<p class="product-name">Waffle with Berries</p>
-		<p class="product-price"><b>$6.50</b></p>
+		<p class="product-category text-lead">{category}</p>
+		<h3 class="product-name text-bold">{name}</h3>
+		<b class="product-price text-bold">${price.toFixed(2)}</b>
 	</div>
 </article>
 
@@ -20,6 +29,7 @@
 	.product-thumbnail {
 		position: relative;
 		width: 100%;
+		margin-bottom: 2.375em;
 	}
 
 	.product-thumbnail-image {
@@ -29,22 +39,16 @@
 		display: block;
 	}
 
-	.product-type {
+	.product-category {
+		margin-bottom: 0.28em;
 		color: var(--rose-500);
-		font-size: 0.95rem;
-		margin-bottom: 0.2em;
 	}
 
 	.product-name {
-		font-weight: var(--bold);
-		margin-bottom: 0.1em;
+		margin-bottom: 0.25em;
 	}
 
 	.product-price {
 		color: var(--red);
-
-		b {
-			font-weight: var(--bold);
-		}
 	}
 </style>

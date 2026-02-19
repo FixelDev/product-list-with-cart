@@ -29,7 +29,7 @@
 	}: Props = $props();
 </script>
 
-<article class="product">
+<article class="product {isInCart(id) ? 'in-cart' : ''}">
 	<div class="product-thumbnail">
 		<img src={image.mobile} alt={`${name} image`} class="product-thumbnail-image" />
 		<AddToCartButton
@@ -49,6 +49,10 @@
 </article>
 
 <style>
+	.product.in-cart .product-thumbnail-image {
+		border-color: var(--red);
+	}
+
 	.product-thumbnail {
 		position: relative;
 		width: 100%;
@@ -56,6 +60,7 @@
 	}
 
 	.product-thumbnail-image {
+		border: 2px solid transparent;
 		width: 100%;
 		border-radius: 0.5em;
 		margin: 0;

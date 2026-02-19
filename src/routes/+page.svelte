@@ -3,6 +3,7 @@
 	import type { ProductType, ProductInCartType } from '\$lib/types';
 	import productsData from '$lib/assets/data.json';
 	import Cart from '$lib/components/Cart.svelte';
+	import OrderConfirmation from '$lib/components/OrderConfirmation.svelte';
 
 	const products: ProductType[] = [...productsData];
 
@@ -20,18 +21,41 @@
 		//TODO: Add check if product is already added and throw exception
 	}
 
+	function removeFromCart(id: number): void {
+		const foundProduct: ProductInCartType | undefined = getProductFromCartById(id);
+
+		if (foundProduct !== undefined) {
+			const productIndex: number = productsInCart.indexOf(foundProduct);
+			productsInCart.splice(productIndex, 1);
+		} else {
+			//TODO throw exception
+		}
+	}
+
+	function getProductFromCartById(id: number): ProductInCartType | undefined {
+		const foundProduct: ProductInCartType | undefined = productsInCart.find(
+			(product) => product.id === id
+		);
+
+		return foundProduct;
+	}
+
 	function incrementQuantity(id: number): void {
-		changeQuantityBy(id, 1);
+		if (getQuantity(id) < 20) {
+			changeQuantityBy(id, 1);
+		}
 	}
 
 	function decrementQuantity(id: number): void {
 		changeQuantityBy(id, -1);
+
+		if (getQuantity(id) <= 0) {
+			removeFromCart(id);
+		}
 	}
 
 	function changeQuantityBy(id: number, changeBy: number): void {
-		const foundProduct: ProductInCartType | undefined = productsInCart.find(
-			(product) => product.id === id
-		);
+		const foundProduct: ProductInCartType | undefined = getProductFromCartById(id);
 
 		if (foundProduct !== undefined) {
 			foundProduct.quantity += changeBy;
@@ -45,9 +69,7 @@
 	}
 
 	function getQuantity(id: number): number {
-		const foundProduct: ProductInCartType | undefined = productsInCart.find(
-			(product) => product.id === id
-		);
+		const foundProduct: ProductInCartType | undefined = getProductFromCartById(id);
 
 		if (foundProduct !== undefined) {
 			return foundProduct.quantity;
@@ -81,12 +103,18 @@
 		</section>
 
 		<section class="cart-section">
-			<Cart />
+			<Cart products={productsInCart} onRemoveFromCart={removeFromCart} />
 		</section>
 	</div>
+
+	<OrderConfirmation />
 </main>
 
 <style>
+	main {
+		position: relative;
+	}
+
 	.title {
 		margin-bottom: 0.8em;
 	}

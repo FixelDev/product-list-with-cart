@@ -1,17 +1,25 @@
 <script lang="ts">
+	interface Props {
+		name: string;
+		quantity: number;
+		price: number;
+		onRemoveFromCart: () => void;
+	}
+
+	const { name, quantity, price, onRemoveFromCart }: Props = $props();
 </script>
 
 <article class="cart-item">
 	<div class="cart-item-info">
-		<h3 class="cart-item-name text-lead-bold">Classic Tiramisu</h3>
+		<h3 class="cart-item-name text-lead-bold">{name}</h3>
 
 		<div class="cart-item-info-details">
-			<b class="amount text-lead-bold">1x</b>
-			<p class="unit-price text-lead">@ $5.50</p>
-			<b class="final-price text-lead-bold">$5.50</b>
+			<b class="amount text-lead-bold">{quantity}x</b>
+			<p class="unit-price text-lead">@ ${price.toFixed(2)}</p>
+			<b class="final-price text-lead-bold">${(price * quantity).toFixed(2)}</b>
 		</div>
 	</div>
-	<button class="remove-btn" aria-label="Remove item from the cart"
+	<button class="remove-btn" aria-label="Remove item from the cart" onclick={onRemoveFromCart}
 		><svg
 			xmlns="http://www.w3.org/2000/svg"
 			width="10"

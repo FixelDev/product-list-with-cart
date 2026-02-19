@@ -102,3 +102,23 @@ button {
 	letter-spacing: 0;
 	font-weight: var(--semi-bold);
 }
+
+.btn {
+	width: 100%;
+	border: none;
+	outline: none;
+	background-color: var(--red);
+	color: var(--white);
+	padding: 1em;
+	border-radius: var(--pill);
+}
+
+.btn:hover,
+.btn:focus {
+	cursor: pointer;
+	background-color: hsl(from var(--red) h s calc(l - 10));
+}
+
+.btn:active {
+	transform: scale(var(--btn-clicked-scale));
+}

@@ -3,6 +3,7 @@
 	import CartItem from '$lib/components/CartItem.svelte';
 	import carbonNeutralDeliveryIcon from '$lib/assets/images/icon-carbon-neutral.svg';
 	import type { ProductInCartType } from '$lib/types';
+	import { flip } from 'svelte/animate';
 
 	interface Props {
 		products: ProductInCartType[];
@@ -21,12 +22,14 @@
 		<div class="filled-cart-container">
 			<div class="cart-items">
 				{#each products as product (product.id)}
-					<CartItem
-						name={product.name}
-						quantity={product.quantity}
-						price={product.price}
-						onRemoveFromCart={() => onRemoveFromCart(product.id)}
-					/>
+					<div class="wrapper" animate:flip={{ duration: 400 }}>
+						<CartItem
+							name={product.name}
+							quantity={product.quantity}
+							price={product.price}
+							onRemoveFromCart={() => onRemoveFromCart(product.id)}
+						/>
+					</div>
 				{/each}
 			</div>
 			<div class="order-summary">
@@ -56,6 +59,7 @@
 		background-color: var(--white);
 		border-radius: 0.75em;
 		padding: 1.5em;
+		transition: height;
 	}
 
 	.title {
@@ -100,24 +104,4 @@
 		padding: 1em;
 		margin-bottom: 1.5em;
 	}
-
-	/*.confirm-order-btn {*/
-	/*	width: 100%;*/
-	/*	border: none;*/
-	/*	outline: none;*/
-	/*	background-color: var(--red);*/
-	/*	color: var(--white);*/
-	/*	padding: 1em;*/
-	/*	border-radius: var(--pill);*/
-	/*}*/
-
-	/*.confirm-order-btn:hover,*/
-	/*.confirm-order-btn:focus {*/
-	/*	cursor: pointer;*/
-	/*	background-color: hsl(from var(--red) h s calc(l - 10));*/
-	/*}*/
-
-	/*.confirm-order-btn:active {*/
-	/*	transform: scale(var(--btn-clicked-scale));*/
-	/*}*/
 </style>

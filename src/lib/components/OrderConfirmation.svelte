@@ -2,6 +2,7 @@
 	import orderConfirmedIcon from '$lib/assets/images/icon-order-confirmed.svg';
 	import ConfirmedItem from '$lib/components/ConfirmedItem.svelte';
 	import type { ProductInCartType } from '$lib/types';
+	import { fly, fade } from 'svelte/transition';
 
 	interface Props {
 		products: ProductInCartType[];
@@ -13,7 +14,8 @@
 </script>
 
 <section class="order-confirmation-section">
-	<div class="order-confirmation-modal">
+	<div class="dark-bg" in:fade={{ duration: 500 }}></div>
+	<div class="order-confirmation-modal" in:fly={{ y: 300, duration: 700 }}>
 		<img src={orderConfirmedIcon} alt="Order confirmed checkmark" class="order-confirmed-img" />
 		<h2 class="title heading-big">Order Confirmed</h2>
 		<p class="lead">We hope you enjoy your food!</p>
@@ -42,8 +44,7 @@
 </section>
 
 <style>
-	.order-confirmation-section::before {
-		content: '';
+	.dark-bg {
 		display: block;
 		position: absolute;
 		top: 0;

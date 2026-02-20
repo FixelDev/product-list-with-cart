@@ -1,7 +1,5 @@
 <script lang="ts">
 	import cartIcon from '$lib/assets/images/icon-add-to-cart.svg';
-	import decrementQuantityIcon from '$lib/assets/images/icon-decrement-quantity.svg';
-	import incrementQuantityIcon from '$lib/assets/images/icon-increment-quantity.svg';
 
 	interface Props {
 		quantity: number;
@@ -127,5 +125,16 @@
 
 	.change-quantity-btn:active {
 		transform: scale(var(--btn-clicked-scale));
+	}
+
+	.change-quantity-btn {
+		transition: var(--btn-transition);
+	}
+
+	.add-to-cart-btn {
+		transition:
+			transform var(--transition-time),
+			border-color var(--transition-time),
+			color var(--transition-time);
 	}
 </style>

@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { fly, slide } from 'svelte/transition';
+
 	interface Props {
 		name: string;
 		quantity: number;
@@ -9,7 +11,8 @@
 	const { name, quantity, price, onRemoveFromCart }: Props = $props();
 </script>
 
-<article class="cart-item">
+<!--<article class="cart-item" transition:fly={{ x: 90, duration: 300 }}>-->
+<article class="cart-item" transition:slide={{ duration: 300 }}>
 	<div class="cart-item-info">
 		<h3 class="cart-item-name text-lead-bold">{name}</h3>
 

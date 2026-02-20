@@ -29,7 +29,10 @@
 
 	/* UTILITIES */
 	--pill: 999px;
-	--btn-clicked-scale: 0.98;
+	--btn-clicked-scale: 0.96;
+	--transition-time: 0.2s;
+
+	--btn-transition: transform var(--transition-time), background-color var(--transition-time);
 }
 
 *,
@@ -112,6 +115,7 @@ button {
 	color: var(--white);
 	padding: 1em;
 	border-radius: var(--pill);
+	transition: var(--btn-transition);
 }
 
 .btn:hover,

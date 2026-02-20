@@ -56,9 +56,12 @@ p {
 
 body {
 	font-family: var(--font-family);
-	min-height: 100vh;
 	background-color: var(--rose-50);
 	color: var(--rose-900);
+}
+
+main {
+	min-height: 100vh;
 }
 
 h1,

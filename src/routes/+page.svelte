@@ -1,20 +1,30 @@
 <script lang="ts">
 	import Product from '$lib/components/Product.svelte';
-	import type { ProductType, ProductInCartType } from '\$lib/types';
+	import type { ProductType, ProductInCartType, FilterType } from '\$lib/types';
 	import productsData from '$lib/assets/data.json';
 	import Cart from '$lib/components/Cart.svelte';
 	import OrderConfirmation from '$lib/components/OrderConfirmation.svelte';
 	import FilterButton from '$lib/components/FilterButton.svelte';
+	import SearchBar from '$lib/components/SearchBar.svelte';
 
 	const products: ProductType[] = [...productsData];
-	const allCategories: string[] = productsData.map((product) => product.category);
+	const allCategories: string[] = products.map((product) => product.category);
+	const uniqueCategories: Set<string> = new Set(allCategories);
 
 	let productsInCart: ProductInCartType[] = $state([]);
 	let isOrderFinished: boolean = $state(false);
-	let selectedFilters: string[] = $state([]);
+
+	let filters: FilterType[] = $state(
+		Array.from(uniqueCategories).map((category) => ({ name: category, isActive: false }))
+	);
+	let activeFilters: string[] = $derived(
+		filters.filter((filter) => filter.isActive).map((filter) => filter.name)
+	);
+	let searchQuery: string = $state('');
 
 	$inspect(productsInCart);
-	$inspect(selectedFilters);
+	$inspect(filters);
+	$inspect(searchQuery);
 
 	let orderTotalValue: number = $derived(
 		productsInCart.reduce(
@@ -23,28 +33,6 @@
 			0
 		)
 	);
-
-	function toggleFilter(category: string): void {
-		// Check if passed category exists
-		if (!allCategories.includes(category)) {
-			return;
-		}
-
-		if (selectedFilters.includes(category)) {
-			removeFilter(category);
-		} else {
-			addFilter(category);
-		}
-	}
-
-	function removeFilter(category: string): void {
-		const filterIndex = selectedFilters.indexOf(category);
-		selectedFilters.splice(filterIndex, 1);
-	}
-
-	function addFilter(category: string): void {
-		selectedFilters.push(category);
-	}
 
 	function addToCart(productToAdd: ProductType): void {
 		if (isInCart(productToAdd.id)) {
@@ -117,7 +105,17 @@
 
 	function startNewOrder(): void {
 		productsInCart = [];
+		filters = filters.map((filter) => ({ name: filter.name, isActive: false }));
+		searchQuery = '';
 		isOrderFinished = false;
+	}
+
+	function checkIfCategoryMatchesFilters(category: string): boolean {
+		return activeFilters.length === 0 || activeFilters.includes(category);
+	}
+
+	function checkIfNameMatchesSearchQuery(name: string): boolean {
+		return searchQuery.length === 0 || name.toLowerCase().includes(searchQuery.toLowerCase());
 	}
 </script>
 
@@ -127,29 +125,29 @@
 			<h2 class="title heading-big">Desserts</h2>
 
 			<div class="filters">
-				{#each allCategories as category}
-					<FilterButton
-						{category}
-						onToggleFilter={toggleFilter}
-						isSelected={selectedFilters.includes(category)}
-					/>
+				{#each filters as filter}
+					<FilterButton name={filter.name} bind:isActive={filter.isActive} />
 				{/each}
 			</div>
 
+			<SearchBar bind:searchQuery />
+
 			<div class="products-grid">
 				{#each products as product (product.id)}
-					<Product
-						id={product.id}
-						image={product.image}
-						name={product.name}
-						category={product.category}
-						price={product.price}
-						quantity={getQuantity(product.id)}
-						onAddToCart={() => addToCart(product)}
-						{isInCart}
-						onIncrementQuantity={incrementQuantity}
-						onDecrementQuantity={decrementQuantity}
-					/>
+					{#if checkIfCategoryMatchesFilters(product.category) && checkIfNameMatchesSearchQuery(product.name)}
+						<Product
+							id={product.id}
+							image={product.image}
+							name={product.name}
+							category={product.category}
+							price={product.price}
+							quantity={getQuantity(product.id)}
+							onAddToCart={() => addToCart(product)}
+							{isInCart}
+							onIncrementQuantity={incrementQuantity}
+							onDecrementQuantity={decrementQuantity}
+						/>
+					{/if}
 				{/each}
 			</div>
 		</section>
@@ -191,7 +189,7 @@
 		display: flex;
 		flex-wrap: wrap;
 		gap: 0.2em;
-		margin-bottom: 0.8em;
+		margin-bottom: 2em;
 	}
 
 	.products-section {

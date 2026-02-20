@@ -6,9 +6,10 @@
 	interface Props {
 		products: ProductInCartType[];
 		orderTotalValue: number;
+		onStartNewOrder: () => void;
 	}
 
-	let { products, orderTotalValue }: Props = $props();
+	let { products, orderTotalValue, onStartNewOrder }: Props = $props();
 </script>
 
 <section class="order-confirmation-section">
@@ -34,7 +35,9 @@
 			</div>
 		</div>
 
-		<button class="btn start-new-order-btn">Start New Order</button>
+		<button class="btn start-new-order-btn text-bold" onclick={onStartNewOrder}
+			>Start New Order</button
+		>
 	</div>
 </section>
 
@@ -95,5 +98,22 @@
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
+	}
+
+	@media (min-width: 768px) {
+		.order-confirmation-modal {
+			padding: 2.5em;
+			bottom: 50%;
+			left: 50%;
+			transform: translate(-50%, 50%);
+			border-radius: 0.75em;
+			width: 93%;
+		}
+	}
+
+	@media (min-width: 1000px) {
+		.order-confirmation-modal {
+			width: 592px;
+		}
 	}
 </style>

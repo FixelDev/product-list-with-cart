@@ -31,7 +31,14 @@
 
 <article class="product {isInCart(id) ? 'in-cart' : ''}">
 	<div class="product-thumbnail">
-		<img src={image.mobile} alt={`${name} image`} class="product-thumbnail-image" />
+		<picture class="product-thumbnail-image">
+			<source srcset={image.mobile} media="(width < 768px)" />
+			<source srcset={image.tablet} media="(width < 1200px)" />
+			<source srcset={image.desktop} media="(width >= 1200px)" />
+			<img src={image.mobile} alt="{name} image" />
+		</picture>
+
+		<!--		<img src={image.mobile} alt={`${name} image`} class="product-thumbnail-image" />-->
 		<AddToCartButton
 			{quantity}
 			{onAddToCart}
@@ -49,7 +56,7 @@
 </article>
 
 <style>
-	.product.in-cart .product-thumbnail-image {
+	.product.in-cart .product-thumbnail-image img {
 		border-color: var(--red);
 	}
 
@@ -59,7 +66,7 @@
 		margin-bottom: 2.375em;
 	}
 
-	.product-thumbnail-image {
+	.product-thumbnail-image img {
 		border: 2px solid transparent;
 		width: 100%;
 		border-radius: 0.5em;

@@ -9,6 +9,7 @@
 
 	let productsInCart: ProductInCartType[] = $state([]);
 	let isOrderFinished: boolean = $state(false);
+
 	let orderTotalValue: number = $derived(
 		productsInCart.reduce(
 			(accumulator, currentProduct) =>
@@ -87,28 +88,35 @@
 		return 0;
 	}
 
+	function startNewOrder(): void {
+		productsInCart = [];
+		isOrderFinished = false;
+	}
+
 	$inspect(productsInCart);
 </script>
 
 <main>
 	<div class="container">
-		<h2 class="title heading-big">Desserts</h2>
-
 		<section class="products-section">
-			{#each products as product (product.id)}
-				<Product
-					id={product.id}
-					image={product.image}
-					name={product.name}
-					category={product.category}
-					price={product.price}
-					quantity={getQuantity(product.id)}
-					onAddToCart={() => addToCart(product)}
-					{isInCart}
-					onIncrementQuantity={incrementQuantity}
-					onDecrementQuantity={decrementQuantity}
-				/>
-			{/each}
+			<h2 class="title heading-big">Desserts</h2>
+
+			<div class="products-grid">
+				{#each products as product (product.id)}
+					<Product
+						id={product.id}
+						image={product.image}
+						name={product.name}
+						category={product.category}
+						price={product.price}
+						quantity={getQuantity(product.id)}
+						onAddToCart={() => addToCart(product)}
+						{isInCart}
+						onIncrementQuantity={incrementQuantity}
+						onDecrementQuantity={decrementQuantity}
+					/>
+				{/each}
+			</div>
 		</section>
 
 		<section class="cart-section">
@@ -121,7 +129,11 @@
 		</section>
 	</div>
 	{#if isOrderFinished}
-		<OrderConfirmation products={productsInCart} {orderTotalValue} />
+		<OrderConfirmation
+			products={productsInCart}
+			{orderTotalValue}
+			onStartNewOrder={startNewOrder}
+		/>
 	{/if}
 </main>
 
@@ -135,15 +147,44 @@
 	}
 
 	.container {
-		max-width: 1440px;
+		max-width: 1216px;
 		margin: 0 auto;
 		padding: 1.5em;
 	}
 
 	.products-section {
 		margin-bottom: 2em;
-		display: flex;
-		flex-direction: column;
-		gap: 1.5em;
+	}
+
+	.products-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+		grid-gap: 1.5em 1.5em;
+	}
+
+	@media (min-width: 768px) {
+		.products-grid {
+			grid-gap: 2em 1.5em;
+		}
+	}
+
+	@media (min-width: 1000px) {
+		.container {
+			display: flex;
+			justify-content: space-between;
+			gap: 2em;
+		}
+
+		.products-section {
+			width: 100%;
+		}
+
+		.cart-section {
+			min-width: 384px;
+		}
+
+		.products-grid {
+			/*grid-template-columns: repeat(3, minmax(220px, 1fr));*/
+		}
 	}
 </style>

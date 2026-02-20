@@ -4,11 +4,17 @@
 	import productsData from '$lib/assets/data.json';
 	import Cart from '$lib/components/Cart.svelte';
 	import OrderConfirmation from '$lib/components/OrderConfirmation.svelte';
+	import FilterButton from '$lib/components/FilterButton.svelte';
 
 	const products: ProductType[] = [...productsData];
+	const allCategories: string[] = productsData.map((product) => product.category);
 
 	let productsInCart: ProductInCartType[] = $state([]);
 	let isOrderFinished: boolean = $state(false);
+	let selectedFilters: string[] = $state([]);
+
+	$inspect(productsInCart);
+	$inspect(selectedFilters);
 
 	let orderTotalValue: number = $derived(
 		productsInCart.reduce(
@@ -18,7 +24,33 @@
 		)
 	);
 
+	function toggleFilter(category: string): void {
+		// Check if passed category exists
+		if (!allCategories.includes(category)) {
+			return;
+		}
+
+		if (selectedFilters.includes(category)) {
+			removeFilter(category);
+		} else {
+			addFilter(category);
+		}
+	}
+
+	function removeFilter(category: string): void {
+		const filterIndex = selectedFilters.indexOf(category);
+		selectedFilters.splice(filterIndex, 1);
+	}
+
+	function addFilter(category: string): void {
+		selectedFilters.push(category);
+	}
+
 	function addToCart(productToAdd: ProductType): void {
+		if (isInCart(productToAdd.id)) {
+			return;
+		}
+
 		const newProduct: ProductInCartType = {
 			id: productToAdd.id,
 			name: productToAdd.name,
@@ -28,7 +60,6 @@
 		};
 
 		productsInCart.push(newProduct);
-		//TODO: Add check if product is already added and throw exception
 	}
 
 	function removeFromCart(id: number): void {
@@ -37,8 +68,6 @@
 		if (foundProduct !== undefined) {
 			const productIndex: number = productsInCart.indexOf(foundProduct);
 			productsInCart.splice(productIndex, 1);
-		} else {
-			//TODO throw exception
 		}
 	}
 
@@ -69,8 +98,6 @@
 
 		if (foundProduct !== undefined) {
 			foundProduct.quantity += changeBy;
-		} else {
-			//TODO Throw exception
 		}
 	}
 
@@ -92,14 +119,22 @@
 		productsInCart = [];
 		isOrderFinished = false;
 	}
-
-	$inspect(productsInCart);
 </script>
 
 <main>
 	<div class="container">
 		<section class="products-section">
 			<h2 class="title heading-big">Desserts</h2>
+
+			<div class="filters">
+				{#each allCategories as category}
+					<FilterButton
+						{category}
+						onToggleFilter={toggleFilter}
+						isSelected={selectedFilters.includes(category)}
+					/>
+				{/each}
+			</div>
 
 			<div class="products-grid">
 				{#each products as product (product.id)}
@@ -152,6 +187,13 @@
 		padding: 1.5em;
 	}
 
+	.filters {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.2em;
+		margin-bottom: 0.8em;
+	}
+
 	.products-section {
 		margin-bottom: 2em;
 	}
@@ -181,10 +223,7 @@
 
 		.cart-section {
 			min-width: 384px;
-		}
-
-		.products-grid {
-			/*grid-template-columns: repeat(3, minmax(220px, 1fr));*/
+			position: relative;
 		}
 	}
 </style>

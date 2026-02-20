@@ -49,11 +49,6 @@
 		align-items: center;
 	}
 
-	.confirmed-item-info-details {
-		/*display: flex;*/
-		/*justify-content: space-between;*/
-	}
-
 	.confirmed-item-price-details {
 		display: flex;
 		gap: 0.5em;

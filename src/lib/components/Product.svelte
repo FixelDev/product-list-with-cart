@@ -38,7 +38,6 @@
 			<img src={image.mobile} alt="{name} image" />
 		</picture>
 
-		<!--		<img src={image.mobile} alt={`${name} image`} class="product-thumbnail-image" />-->
 		<AddToCartButton
 			{quantity}
 			{onAddToCart}

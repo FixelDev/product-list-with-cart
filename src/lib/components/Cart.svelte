@@ -3,7 +3,7 @@
 	import CartItem from '$lib/components/CartItem.svelte';
 	import carbonNeutralDeliveryIcon from '$lib/assets/images/icon-carbon-neutral.svg';
 	import type { ProductInCartType } from '$lib/types';
-	import { flip } from 'svelte/animate';
+	import { slide } from 'svelte/transition';
 
 	interface Props {
 		products: ProductInCartType[];
@@ -20,18 +20,21 @@
 
 	{#if products.length > 0}
 		<div class="filled-cart-container">
-			<div class="cart-items">
-				{#each products as product (product.id)}
-					<div class="wrapper" animate:flip={{ duration: 400 }}>
-						<CartItem
-							name={product.name}
-							quantity={product.quantity}
-							price={product.price}
-							onRemoveFromCart={() => onRemoveFromCart(product.id)}
-						/>
-					</div>
-				{/each}
+			<div class="scrollable-list">
+				<div class="cart-items">
+					{#each products as product (product.id)}
+						<div class="wrapper" transition:slide={{ duration: 300 }}>
+							<CartItem
+								name={product.name}
+								quantity={product.quantity}
+								price={product.price}
+								onRemoveFromCart={() => onRemoveFromCart(product.id)}
+							/>
+						</div>
+					{/each}
+				</div>
 			</div>
+
 			<div class="order-summary">
 				<p class="text-lead">Order Total</p>
 				<b class="heading">${orderTotalValue.toFixed(2)}</b>
@@ -84,7 +87,15 @@
 	.cart-items {
 		display: flex;
 		flex-direction: column;
-		gap: 1em;
+	}
+
+	.scrollable-list {
+		max-height: 300px;
+		overflow-y: auto;
+	}
+
+	.wrapper:not(:last-child) {
+		margin-bottom: 1em;
 	}
 
 	.order-summary {
@@ -103,5 +114,12 @@
 		align-items: center;
 		padding: 1em;
 		margin-bottom: 1.5em;
+	}
+
+	@media (min-width: 1000px) {
+		.cart {
+			position: sticky;
+			top: 0;
+		}
 	}
 </style>

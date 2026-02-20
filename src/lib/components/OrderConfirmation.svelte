@@ -14,32 +14,39 @@
 </script>
 
 <section class="order-confirmation-section">
-	<div class="dark-bg" in:fade={{ duration: 500 }}></div>
-	<div class="order-confirmation-modal" in:fly={{ y: 300, duration: 700 }}>
-		<img src={orderConfirmedIcon} alt="Order confirmed checkmark" class="order-confirmed-img" />
-		<h2 class="title heading-big">Order Confirmed</h2>
-		<p class="lead">We hope you enjoy your food!</p>
+	<div class="dark-bg" transition:fade={{ duration: 500 }}></div>
 
-		<div class="order-summary">
-			<div class="ordered-products">
-				{#each products as product (product.id)}
-					<ConfirmedItem
-						thumbnail={product.thumbnail}
-						name={product.name}
-						quantity={product.quantity}
-						price={product.price}
-					/>
-				{/each}
+	<div class="order-confirmation-modal-wrapper">
+		<div class="order-confirmation-modal" transition:fly={{ y: 300, duration: 700 }}>
+			<img
+				src={orderConfirmedIcon}
+				alt="Order confirmed checkmark"
+				class="order-confirmed-img"
+			/>
+			<h2 class="title heading-big">Order Confirmed</h2>
+			<p class="lead">We hope you enjoy your food!</p>
+
+			<div class="order-summary">
+				<div class="ordered-products">
+					{#each products as product (product.id)}
+						<ConfirmedItem
+							thumbnail={product.thumbnail}
+							name={product.name}
+							quantity={product.quantity}
+							price={product.price}
+						/>
+					{/each}
+				</div>
+
+				<div class="order-total-price">
+					Order Total <b class="heading">${orderTotalValue.toFixed(2)}</b>
+				</div>
 			</div>
 
-			<div class="order-total-price">
-				Order Total <b class="heading">${orderTotalValue.toFixed(2)}</b>
-			</div>
+			<button class="btn start-new-order-btn text-bold" onclick={onStartNewOrder}
+				>Start New Order</button
+			>
 		</div>
-
-		<button class="btn start-new-order-btn text-bold" onclick={onStartNewOrder}
-			>Start New Order</button
-		>
 	</div>
 </section>
 
@@ -54,11 +61,14 @@
 		background-color: rgba(0, 0, 0, 50%);
 	}
 
-	.order-confirmation-modal {
+	.order-confirmation-modal-wrapper {
 		position: fixed;
 		bottom: 0;
 		left: 0;
 		width: 100%;
+	}
+
+	.order-confirmation-modal {
 		background-color: var(--white);
 		padding: 2.5em 1.5em 1.5em 1.5em;
 		border-radius: 0.75em 0.75em 0 0;
@@ -93,6 +103,8 @@
 		flex-direction: column;
 		gap: 1em;
 		margin-bottom: 1.5em;
+		max-height: 300px;
+		overflow-y: auto;
 	}
 
 	.order-total-price {
@@ -102,13 +114,16 @@
 	}
 
 	@media (min-width: 768px) {
+		.order-confirmation-modal-wrapper {
+			inset: 0;
+			display: grid;
+			place-items: center;
+		}
+
 		.order-confirmation-modal {
 			padding: 2.5em;
-			bottom: 50%;
-			left: 50%;
-			transform: translate(-50%, 50%);
-			border-radius: 0.75em;
 			width: 93%;
+			border-radius: 0.75em;
 		}
 	}
 

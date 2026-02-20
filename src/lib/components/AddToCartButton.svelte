@@ -48,7 +48,7 @@
 		</div>
 	{:else}
 		<button class="add-to-cart-btn text-lead-bold" onclick={onAddToCart}>
-			<img src={cartIcon} alt="Add to cart" class="add-to-card-img" />
+			<img src={cartIcon} alt="Shopping cart icon" class="add-to-card-img" />
 			Add to Cart
 		</button>
 	{/if}

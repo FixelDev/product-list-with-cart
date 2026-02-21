@@ -11,7 +11,6 @@
 		onOrderConfirmed: () => void;
 		orderTotalValue: number;
 	}
-
 	let { products, onRemoveFromCart, onOrderConfirmed, orderTotalValue }: Props = $props();
 </script>
 

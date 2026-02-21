@@ -103,7 +103,7 @@
 		flex-direction: column;
 		gap: 1em;
 		margin-bottom: 1.5em;
-		max-height: 300px;
+		max-height: 210px;
 		overflow-y: auto;
 	}
 
